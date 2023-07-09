@@ -72,7 +72,7 @@ namespace Proekt.API.Controllers
 			return CreatedAtRoute("GetActivity", new
 			{
 				clientid = clientid,
-				 Id = NewReport.Id
+				 ActivityID = NewReport.Id
 				
 			},
 		NewReport);
