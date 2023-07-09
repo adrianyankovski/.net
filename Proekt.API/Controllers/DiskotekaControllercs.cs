@@ -29,7 +29,7 @@ namespace Proekt.API.Controllers
 	
 		}
 
-		[HttpPut("{clientid}")]
+		[HttpPatch("{clientid}")]
 		public ActionResult ChangeBanStatus(int clientId)
 		{
 			var clientToReturn = ClientsDataStore.Current.Clients

@@ -31,3 +31,5 @@ C:\Users\logik\Desktop\Proekt.API\Proekt.API\obj\Debug\net6.0\Proekt.API.pdb
 C:\Users\logik\Desktop\Proekt.API\Proekt.API\obj\Debug\net6.0\Proekt.API.genruntimeconfig.cache
 C:\Users\logik\Desktop\Proekt.API\Proekt.API\obj\Debug\net6.0\ref\Proekt.API.dll
 C:\Users\logik\Desktop\Proekt.API\Proekt.API\bin\Debug\net6.0\logoPartymeScatches-01.png
+C:\Users\logik\Desktop\Proekt.API\Proekt.API\bin\Debug\net6.0\Microsoft.AspNetCore.JsonPatch.dll
+C:\Users\logik\Desktop\Proekt.API\Proekt.API\bin\Debug\net6.0\Newtonsoft.Json.dll
