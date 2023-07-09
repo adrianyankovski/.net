@@ -16,7 +16,7 @@ namespace Proekt.API
 				{
 					Id =1,
 					Name = "Silvester Brabursa",
-					Description = "Mangal s w124 kraden merjdan",
+					Description = "Краден мерджан",
 					Age = 20,
 					Allowed = false,
 						Activity = new List<ActivityDTO>()
@@ -26,7 +26,7 @@ namespace Proekt.API
 						Id = 1,
 						Date = "12.01.2022",
 						Bill = 200,
-						ProblemsCaused = "Sedq na bara cqla vecher i obarvashe tanciorkite, izgoniha go s preduprejdenie",
+						ProblemsCaused = "Sedq na bara cqla vecher , izgoniha go s preduprejdenie",
 						DiscountForNextTime = false
 
 					},
@@ -36,7 +36,7 @@ namespace Proekt.API
 						Id = 2,
 						Date = "1.02.2023",
 						Bill = 1700,
-						ProblemsCaused = "Subra cqlata mahla, horata si trugnaha, beshe fanat da krade portfeili i prevruzki. Bannat zavinagi",
+						ProblemsCaused = "Subra cqlata mahla, horata si trugnaha, beshe fanat da krade portfeili. Bannat zavinagi",
 						DiscountForNextTime = false
 
 
@@ -68,8 +68,8 @@ namespace Proekt.API
 						Id = 2,
 						Date = "10.09.2023",
 						Bill = 1000,
-						ProblemsCaused = "Svqlqshe serviotiorkata, prebi ohranata poneje mu se izdurvi." +
-						" Ne si plati smetkata i bashta mu trqqsge da idva da se opravq magariite mu",
+						ProblemsCaused = "Svqlqshe serviotiorkata, prebi ohranata poneje mu se izdurvi.",
+					
 						DiscountForNextTime = false
 
 
