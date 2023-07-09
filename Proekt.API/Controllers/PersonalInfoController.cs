@@ -49,6 +49,7 @@ namespace Proekt.API.Controllers
 		public ActionResult<LogActivityDTO> AddActivityLog(
 			int clientid, LogActivityDTO activitylog)
 		{
+			
 			var client = ClientsDataStore.Current.Clients.FirstOrDefault(c => c.Id == clientid);
 			if (client == null)
 			{

@@ -28,5 +28,29 @@ namespace Proekt.API.Controllers
 			return Ok(clientToReturn);
 	
 		}
+
+		[HttpPut("{clientid}")]
+		public ActionResult ChangeBanStatus(int clientId)
+		{
+			var clientToReturn = ClientsDataStore.Current.Clients
+				.FirstOrDefault(c => c.Id == clientId);
+
+			if (clientToReturn == null)
+			{
+				return NotFound();
+			}
+
+			if(clientToReturn.Allowed == false)
+			{
+				clientToReturn.Allowed = true;
+				return Ok(clientToReturn);
+			}
+			else
+			{
+				clientToReturn.Allowed = false;
+				return Ok(clientToReturn);
+			}
+		}
+
 	}
 }
