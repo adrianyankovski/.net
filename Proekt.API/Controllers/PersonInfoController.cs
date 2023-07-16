@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Proekt.API.Models;
+using Proekt.API.Services;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace Proekt.API.Controllers
 {
@@ -10,23 +12,48 @@ namespace Proekt.API.Controllers
 	[ApiController]
 	public class PersonalInfoController : ControllerBase
 	{
+		private readonly ILogger<PersonalInfoController> _logger;
+		private readonly IMailService _mailService;
+		private readonly ClientsDataStore _clientsDataStore;
+
+		
+
+		public PersonalInfoController(ILogger<PersonalInfoController> logger, 
+			IMailService mailservice,
+			ClientsDataStore clientsDataStore)
+			{ 
+			_logger = logger ?? throw new ArgumentNullException(nameof(logger));
+			_mailService = mailservice ?? throw new ArgumentNullException(nameof(mailservice));
+			_clientsDataStore = clientsDataStore ?? throw new ArgumentNullException(nameof(clientsDataStore));
+		}
+
+
 		[HttpGet]
 		public ActionResult<IEnumerable<ActivityDTO>> GetClientInfo(int clientid)
 		{
-			var client = ClientsDataStore.Current.Clients.FirstOrDefault(c => c.Id == clientid);
-
-			if (client == null)
+			try
 			{
-				return NotFound();
-			}
+				var client = _clientsDataStore.Clients.FirstOrDefault(c => c.Id == clientid);
 
-			return Ok(client.Activity);
+				if (client == null)
+				{
+					_logger.LogInformation($"Client with {clientid} has no activity history");
+					return NotFound();
+				}
+
+				return Ok(client.Activity);
+			}
+			catch (Exception ex)
+			{
+				_logger.LogCritical($"Exception while getting ClientInfo for client with id {clientid}.", ex);
+				return StatusCode(500, "A problem while handling your request");
+			}
 		}
 
 		[HttpGet("{ActivityID}", Name = "GetActivity")]
 		public ActionResult<ActivityDTO> GetActivity(int clientid, int ActivityID)
 		{
-			var client = ClientsDataStore.Current.Clients.FirstOrDefault(c => c.Id == clientid);
+			var client = _clientsDataStore.Clients.FirstOrDefault(c => c.Id == clientid);
 			if (client == null)
 			{
 				return NotFound();
@@ -51,13 +78,13 @@ namespace Proekt.API.Controllers
 			int clientid, LogActivityDTO activitylog)
 		{
 
-			var client = ClientsDataStore.Current.Clients.FirstOrDefault(c => c.Id == clientid);
+			var client = _clientsDataStore.Clients.FirstOrDefault(c => c.Id == clientid);
 			if (client == null)
 			{
 				return NotFound();
 			}
 
-			var ActivityReports = ClientsDataStore.Current.Clients.SelectMany(
+			var ActivityReports = _clientsDataStore.Clients.SelectMany(
 				c => c.Activity).Max(p => p.Id);
 
 			var NewReport = new ActivityDTO()
@@ -85,7 +112,7 @@ namespace Proekt.API.Controllers
 		public ActionResult UpdateActivityLog(int clientid, int activityid,
 			JsonPatchDocument<LogActivityupdateDTO> patchDocument)
 		{
-			var client = ClientsDataStore.Current.Clients.FirstOrDefault( c => c.Id == clientid);
+			var client = _clientsDataStore.Clients.FirstOrDefault( c => c.Id == clientid);
 			if(client == null)
 			{
 				return NotFound();
@@ -113,6 +140,26 @@ namespace Proekt.API.Controllers
 			ActivitySelected.DiscountForNextTime = UpdateActivityLog.DiscountForNextTime;
 
 			return Ok(ActivitySelected);
+		}
+
+		[HttpDelete("{ActivityID}")]
+
+		public ActionResult DeleteActivities(int clientid, int activityid) {
+
+			var client = _clientsDataStore.Clients.FirstOrDefault
+				(c => c.Id == clientid);
+			if(client == null) { return NotFound();}
+			var ActivitySelected = client.Activity.FirstOrDefault(a => a.Id == activityid);
+			if (ActivitySelected == null)
+			{
+				return NotFound();
+			}
+
+			client.Activity.Remove(ActivitySelected);
+			_mailService.Send(
+				"Client Activity Deleted.",
+				$"Activity id {ActivitySelected.Id} was deleted.");
+			return NoContent();
 		}
 	}
 }

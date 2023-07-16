@@ -6,7 +6,7 @@ namespace Proekt.API
 	{
 		public List<ClientDTO> Clients { get; set; }
 
-		public static ClientsDataStore Current { get; } = new ClientsDataStore();
+		//public static ClientsDataStore Current { get; } = new ClientsDataStore();
 
 		public ClientsDataStore()
 		{

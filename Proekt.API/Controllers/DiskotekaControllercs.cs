@@ -9,16 +9,22 @@ namespace Proekt.API.Controllers
 	[Route("api/clients")]
 	public class DiskotekaControllercs : ControllerBase
 	{
-		[HttpGet]
+		private readonly ClientsDataStore _clientsDataStore;
+		public DiskotekaControllercs(ClientsDataStore clientsDataStore)
+		{
+			_clientsDataStore = clientsDataStore ?? throw new ArgumentNullException(nameof(clientsDataStore));
+		}
+		
+			[HttpGet]
 		public ActionResult<IEnumerable<ClientDTO>> GetClients()
 		{
-			return Ok(ClientsDataStore.Current.Clients);
+			return Ok(_clientsDataStore.Clients);
 		}
 
 		[HttpGet("{id}")]
 		public ActionResult<ClientDTO> GetClient(int id)
 		{
-			var clientToReturn = ClientsDataStore.Current.Clients
+			var clientToReturn = _clientsDataStore.Clients
 				.FirstOrDefault(c => c.Id == id);
 
 			if (clientToReturn == null)
@@ -32,7 +38,7 @@ namespace Proekt.API.Controllers
 		[HttpPatch("{clientid}")]
 		public ActionResult ChangeBanStatus(int clientId)
 		{
-			var clientToReturn = ClientsDataStore.Current.Clients
+			var clientToReturn = _clientsDataStore.Clients
 				.FirstOrDefault(c => c.Id == clientId);
 
 			if (clientToReturn == null)
